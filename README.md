@@ -29,6 +29,25 @@ This project implements a debounced button-controlled Finite State Machine (FSM)
 ## 🧪 Verification
 RTL design verified using VHDL testbench simulation.
 
+## 📂 Project Files
+
+| File Name                   | Description                          |
+|----------------------------|--------------------------------------|
+| debounced_fsm_controller.vhd | RTL FSM implementation               |
+| main_program_tb.vhd        | Testbench for functional verification|
+
+## 🧪 Verification Strategy
+
+A dedicated VHDL testbench is implemented to validate FSM state transitions under debounced button inputs.
+
+The testbench:
+- Simulates mechanical button bounce behavior
+- Applies stable button presses exceeding debounce duration
+- Verifies rising-edge triggered state transitions
+- Confirms correct LED outputs for each FSM state
+
+Assertions are used to detect unexpected state transitions during simulation.
+
 ---
 
 Developed for FPGA-Based Digital Design coursework.
