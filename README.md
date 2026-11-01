@@ -1,44 +1,48 @@
-# Debounced Button-Controlled FSM (VHDL RTL)
+# Debounced Button-Controlled FSM
 
-This project implements a debounced button-controlled Finite State Machine (FSM) in VHDL at RTL level for reliable state transitions under mechanical push-button inputs.
+**Author: southpaw**
 
-## 🔧 Features
-- 4-State Sequential FSM (basla, sola_don, saga_don, dur)
-- Rising-edge detection for push-button inputs
-- Digital debounce filtering
-- Active-low reset (nRst)
-- RTL-level hardware description
+A four-state VHDL coursework design combining button debounce,
+rising-edge detection and LED state indication.
 
-## 📥 Inputs
-- clk (100 MHz)
-- sol_buton
-- sag_buton
-- merkez_buton
-- nRst
+## Interface
 
-## 📤 Outputs
-- led(2): Motor rotates left
-- led(1): Motor stop
-- led(0): Motor rotates right
+| Port | Meaning |
+|---|---|
+| clk | System clock; the testbench uses 100 MHz |
+| sol_buton / sag_buton / merkez_buton | Active-high left / right / center button inputs |
+| nRst | Active-low asynchronous FSM reset |
+| led(2 downto 0) | 100: left, 001: right, 010: stopped/start |
 
-## 🧪 Verification
-A dedicated VHDL testbench was developed to functionally verify FSM behavior.
+The output encodes logical states. A motor driver is not implemented.
 
-The verification process includes:
-- Simulation of mechanical button bounce effects
-- Debounce duration validation
-- Rising-edge triggered state transition checks
-- LED output validation for each FSM state
+## Design
 
-Assertions are used within the testbench to detect unexpected transitions during simulation.
+The top-level entity is main_program, with states basla, sola_don,
+saga_don and dur. A fixed 1,000,000-cycle counter threshold filters each
+button input, approximately 10 ms at the testbench clock plus pipeline latency.
+Transitions use rising edges of the filtered button signals.
 
-## 📂 Project Files
+## Files
 
-| File Name                      | Description                          |
-|--------------------------------|--------------------------------------|
-| debounced_fsm_controller.vhd   | RTL FSM implementation               |
-| main_program_tb.vhd            | Testbench for functional verification|
+| File | Purpose |
+|---|---|
+| [debounced_fsm_controller.vhd](debounced_fsm_controller.vhd) | RTL implementation |
+| [debounced_fsm_controller_TB.vhd](debounced_fsm_controller_TB.vhd) | Assertion-based testbench |
 
----
+## Verification status and limits
 
-Developed as part of FPGA-Based Digital Design coursework.
+The testbench contains bounce and state-transition scenarios. Its held-button
+scenario needs correction because it releases and presses the button again
+before expecting no transition. A newly passing simulation is not claimed.
+No tests or simulation were run for this documentation update.
+
+In the current RTL, reset applies to the FSM but not the debounce counters or
+edge history. Asynchronous buttons are sampled directly; hardware integration
+needs an input-synchronization review. Board constraints and physical FPGA
+validation are not supplied.
+
+## Authorship and licensing
+
+Coursework implementation: **southpaw**.
+A project license has not yet been selected.
